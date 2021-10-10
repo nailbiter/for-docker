@@ -5,5 +5,18 @@ services:
 
 before_install:
   - docker build -t nailbiter/for-docker -f Dockerfile.dev .  
+
 script:
   - docker run -e CI=true nailbiter/for-docker npm run test
+
+deploy:    
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "for-docker"
+  env: "Fordocker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-824059422197"
+  bucket_path: "for-docker"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY    
